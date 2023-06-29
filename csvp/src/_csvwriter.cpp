@@ -1,23 +1,22 @@
+/*
+ *  Copyright (c) 2023 Baro-coder
+ *
+ *  This library is free software; you can redistribute it and/or modify it
+ *  under the terms of the GNU GENERAL PUBLIC LICENSE v3. See `src/csvp.cpp` for details.
+ */
+
 #include "_csvwriter.hpp"
 
-namespace csv_parser
+namespace _CSVP
 {
     CSV_Writer::CSV_Writer()
     {
         this->name = "Writer";
-
-#ifdef DEBUG
-        std::cerr << "DEBUG :: CSV_Reader :: Creating instance (at " << this << ")" << std::endl;
-#endif
     }
 
     CSV_Writer::CSV_Writer(std::string)
     {
         this->name = name;
-
-#ifdef DEBUG
-        std::cerr << "DEBUG :: CSV_Writing :: Creating instance (at " << this << ")" << std::endl;
-#endif
     }
 
     CSV_Writer::~CSV_Writer()
