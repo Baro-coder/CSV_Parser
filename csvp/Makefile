@@ -34,7 +34,7 @@ ifeq (${OS}, Linux)
 $(info [+] Detected supported OS: $(OS))
 
 $(eval LIB_TARGET = lib$(TARGET).a)
-$(eval CFLAGS += -DOS_LIN)
+$(eval CFLAGS += -DLIN_OS)
 
 else
 ifeq (${OS}, Windows_NT)
@@ -42,7 +42,7 @@ $(info [+] Detected supported OS: $(OS))
 
 $(eval LIB_TARGET = lib$(TARGET).so)
 $(eval EXE_TARGET = $(TEST_TARGET).exe)
-$(eval CFLAGS += -DOS_WIN)
+$(eval CFLAGS += -DWIN_OS)
 
 $(error [!] Compiling rules not implemented yet. Please, contact with project administrator.)
 
@@ -61,29 +61,29 @@ all: clean build $(LIB_TARGET)
 ## Tests Rule : Build and run all tests from tests/
 tests: clean build $(LIB_TARGET) $(TEST_TARGET)
 ## Install Rule : install library into the system
-install: all
+install: all uninstall
 	$(info [*] Install : Installing library:)
 	@echo "\t sudo mkdir /usr/include/csvp"
 	@sudo mkdir /usr/include/csvp
 	
-	@echo "\t sudo cp ./include/* /usr/include/csvp/"
-	@sudo cp ./include/* /usr/include/csvp/
+	@echo "\t sudo cp -R ./include/csvp/* /usr/include/csvp/"
+	@sudo cp -R ./include/csvp/* /usr/include/csvp/
 	
 	@echo "\t sudo cp ./lib/$(LIB_TARGET) /usr/lib/"
 	@sudo cp ./lib/$(LIB_TARGET) /usr/lib/
 
-	@echo "\nLibrary was successfully installed."
+	@echo "\n-- Library was successfully installed. -- \n"
 
 ## Uninstall Rule : remove library from the system
 uninstall:
-	$(info [*] Uninstall : Removing library from system:)
+	$(info [*] Uninstall : Removing library from system (if it exists):)
 	@echo "\t sudo rm -fr /usr/include/csvp/"
 	@sudo rm -fr /usr/include/csvp/
 
 	@echo "\t sudo rm -f /usr/lib/$(LIB_TARGET)"
 	@sudo rm -f /usr/lib/$(LIB_TARGET)
 
-	@echo "\nLibrary was successfully removed."
+	@echo "\n-- Library was successfully removed. -- \n"
 
 ## Clean Rule : remove work directories
 clean:
@@ -114,7 +114,7 @@ $(LIB_TARGET): $(OBJECTS)
 
 ## Rule : Building C/C++ Object files
 $(OBJECTS):
-	$(info [*] Object : $@ : Building object:)\
+	$(info [+] Object : $@ : Building object:)\
 
 	@echo "\t $(CC) -c $(patsubst obj/%, src/%, $(*D))/$(*F).cpp -o $@ $(CFLAGS)\n"
 	@$(CC) -c $(patsubst obj%, src%, $(*D))/$(*F).cpp -o $@ $(CFLAGS)
@@ -133,7 +133,7 @@ $(TEST_TARGET): $(OBJECTS_TESTS)
 
 ## Rule : Building C/C++ Object files from unit test source files
 $(OBJECTS_TESTS):
-	$(info [*] Object : $@ : Building object:)
+	$(info [+] Object : $@ : Building object:)
 
 	@echo "\t $(CC) -c $(patsubst obj/%, %, $(*D))/$(*F).cpp -o $@ $(CFLAGS)\n"	
 	@$(CC) -c $(patsubst obj/%, %, $(*D))/$(*F).cpp -o $@ $(CFLAGS)
