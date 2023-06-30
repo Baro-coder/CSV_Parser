@@ -7,6 +7,18 @@
 
 #pragma once
 
-namespace csvp{
+/*
+    INTERFACE USAGE:
+
+    csvp::csvRead(const char* filepath)     ->  csvp::DataFrame
+    csvp::csvWrite(const char* filepath)    ->  void
+
+*/
+
+#include "public/cell.hpp"
+#include "public/dataFrame.hpp"
+
+
+namespace csvp {
     int getTwo();
 };

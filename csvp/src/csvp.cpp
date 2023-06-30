@@ -20,9 +20,9 @@
  *  IN THE SOFTWARE.
  */
 
-#include "csvp.hpp"
-#include "_csvreader.hpp"
-#include "_csvwriter.hpp"
+#include <csvp/csvp.hpp>
+#include <csvp/private/_csvreader.hpp>
+#include <csvp/private/_csvwriter.hpp>
 
 
 namespace csvp {

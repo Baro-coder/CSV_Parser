@@ -5,27 +5,27 @@
  *  under the terms of the GNU GENERAL PUBLIC LICENSE v3. See `src/csvp.cpp` for details.
  */
 
-#include "_csvwriter.hpp"
+#include <csvp/private/_csvreader.hpp>
 
 namespace _CSVP
 {
-    CSV_Writer::CSV_Writer()
+    CSV_Reader::CSV_Reader()
     {
-        this->name = "Writer";
+        this->name = "Reader";
     }
 
-    CSV_Writer::CSV_Writer(std::string)
+    CSV_Reader::CSV_Reader(std::string)
     {
         this->name = name;
     }
 
-    CSV_Writer::~CSV_Writer()
+    CSV_Reader::~CSV_Reader()
     {
         this->name = "";
     }
 
-    void CSV_Writer::introduce(void)
+    void CSV_Reader::introduce(void)
     {
-        std::cout << "CSV_Writer(" << this->name << ") says: Hello!" << std::endl;
+        std::cout << "CSV_Reader(" << this->name << ") says: Hello!" << std::endl;
     }
 }

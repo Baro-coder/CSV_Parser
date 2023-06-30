@@ -17,7 +17,9 @@ TEST_TARGET = execute_tests
 
 ### -- Library sources and objects
 SOURCES = $(wildcard src/*.cpp)
+_SRC_W = $(wildcard src/*/*/*.cpp)
 OBJECTS = $(patsubst src/%.cpp, obj/%.o, $(SOURCES))
+OBJECTS += $(patsubst src/%.cpp, obj/%.o, $(_SRC_W))
 
 ### -- Unit tests sources and objects
 SOURCES_TESTS = $(wildcard tests/*.cpp)
@@ -94,7 +96,7 @@ clean:
 build: clean
 	$(info [*] Build : Making directories:)
 	@echo "\t mkdir bin/ obj/ lib/"
-	@mkdir -p bin/ obj/tests lib/
+	@mkdir -p bin/ lib/ obj/tests obj/classes/private obj/classes/public
 	@echo
 
 # --------------------------------------------
@@ -108,13 +110,14 @@ $(LIB_TARGET): $(OBJECTS)
 	@echo "\t ar crs lib/$@ $^\n"
 	@ar crs lib/$@ $^
 
-	@echo "Library '$@' successfully made in lib/\n"
+	@echo "-- Library '$@' successfully made in lib/ --\n"
 
 ## Rule : Building C/C++ Object files
 $(OBJECTS):
-	$(info [*] Object : $@ : Building object:)
-	@echo "\t $(CC) -c src/$(*F).cpp -o $@ $(CFLAGS)\n"
-	@$(CC) -c src/$(*F).cpp -o $@ $(CFLAGS)
+	$(info [*] Object : $@ : Building object:)\
+
+	@echo "\t $(CC) -c $(patsubst obj/%, src/%, $(*D))/$(*F).cpp -o $@ $(CFLAGS)\n"
+	@$(CC) -c $(patsubst obj%, src%, $(*D))/$(*F).cpp -o $@ $(CFLAGS)
 
 ## Rule : Compile main test source file with linkinkg of already made library
 $(TEST_TARGET): $(OBJECTS_TESTS)
@@ -126,11 +129,11 @@ $(TEST_TARGET): $(OBJECTS_TESTS)
 	@echo "\t $(CC) $^ -o bin/$@ $(CFLAGS)\n"
 	@$(CC) $^ -o bin/$@ $(CFLAGS)
 
-	@echo "Executable '$@' successfully created in bin/\n"
+	@echo "-- Executable '$@' successfully created in bin/ --\n"
 
 ## Rule : Building C/C++ Object files from unit test source files
 $(OBJECTS_TESTS):
 	$(info [*] Object : $@ : Building object:)
 
-	@echo "\t $(CC) -c tests/$(*F).cpp -o $@ $(CFLAGS)\n"
-	@$(CC) -c tests/$(*F).cpp -o $@ $(CFLAGS)
+	@echo "\t $(CC) -c $(patsubst obj/%, %, $(*D))/$(*F).cpp -o $@ $(CFLAGS)\n"	
+	@$(CC) -c $(patsubst obj/%, %, $(*D))/$(*F).cpp -o $@ $(CFLAGS)
